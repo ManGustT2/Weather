@@ -12,6 +12,11 @@ public class Data {
     private String temperature;
     private int imageView;
 
+    //bla bla bla
+
+    //Рсука в пизду лагає дивися що я роблю потім поясню цю хуйню бо її бля треба знати)
+    //
+
 
     Data(String _press,String _day, String _temperature, int _imageView){
         pressure = _press;
