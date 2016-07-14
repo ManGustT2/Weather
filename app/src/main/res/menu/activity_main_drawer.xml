@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_current"
+            android:icon="@drawable/ic_menu_today"
+            android:title="@string/current_item" />
+        <item
+            android:id="@+id/nav_week"
+            android:icon="@drawable/ic_menu_week"
+            android:title="@string/week_item" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_menu_setting"
+            android:title="@string/settingd_item" />
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_menu_exit"
+            android:title="@string/exit_item" />
+
+    </group>
+
+
+
+
+</menu>
