@@ -22,7 +22,7 @@
             android:id="@+id/textViewDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:text="День недели: понедельник"
             android:padding="12dp"
             android:layout_marginRight="24dp"
