@@ -1,5 +1,6 @@
 package ru.klim.weatherinfo;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,6 +33,7 @@ public class WeekWeatherFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ArrayList<Integer> drawable = new ArrayList<Integer>();
         drawable.ensureCapacity(7);
         drawable.add(R.drawable.snow);
@@ -66,6 +68,7 @@ public class WeekWeatherFragment extends Fragment {
             Data d = new Data(press,day,temperature,imegeView);
             data.add(d);
         }
+
 
     }
 

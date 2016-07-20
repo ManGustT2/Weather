@@ -12,12 +12,14 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/wifiTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Обновить только по Wi-fi"
             android:textSize="20dp"
             />
         <Switch
+            android:id="@+id/wifiSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
@@ -26,13 +28,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-        //це все текстові поля а не едіт текст!!!
         <TextView
+            android:id="@+id/startTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Обновить при старте"
             android:textSize="20dp"/>
         <Switch
+            android:id="@+id/startSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -40,16 +43,19 @@
     </RelativeLayout>
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/askToEnterTxtView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Спрашивать при входе"
             android:textSize="20dp"/>
         <Switch
+            android:id="@+id/askToEnterSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
