@@ -48,7 +48,7 @@ public class WeatherAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view==null){
-            view = lInflater.inflate(R.layout.week_adapter,parent,false);
+            view = lInflater.inflate(R.layout.week_adapter, parent, false);
         }
         Data d = getData(position);
 
@@ -57,19 +57,18 @@ public class WeatherAdapter extends BaseAdapter{
         TextView tvDay = (TextView) view.findViewById(R.id.textViewDay);
         tvDay.setText(d.getDay());
         TextView tvTemperature = (TextView) view.findViewById(R.id.textViewTemoerature);
-        tvTemperature.setText("Температура");
+        tvTemperature.setText(d.getTemperature());
         ImageView ivIcon = (ImageView) view.findViewById(R.id.imageView);
         if(d.getImageView() != 0){
-           ivIcon.setImageResource(d.getImageView());
+            ivIcon.setImageResource(d.getImageView());
         }
-
 
 // запусти перевірь чи працює
 
-//        ((TextView) view.findViewById(R.id.pressure)).setText(d.getDay());
-//        ((TextView) view.findViewById(R.id.textViewDay)).setText("");
-//        ((TextView) view.findViewById(R.id.textViewTemoerature)).setText("");
-//        ((ImageView) view.findViewById(R.id.imageView)).setImageResource(d.getImageView());
+// ((TextView) view.findViewById(R.id.pressure)).setText(d.getDay());
+// ((TextView) view.findViewById(R.id.textViewDay)).setText("");
+// ((TextView) view.findViewById(R.id.textViewTemoerature)).setText("");
+// ((ImageView) view.findViewById(R.id.imageView)).setImageResource(d.getImageView());
 
         return view;
     }
@@ -81,11 +80,9 @@ public class WeatherAdapter extends BaseAdapter{
     ArrayList<Data> getData() {
         ArrayList<Data> box = new ArrayList<Data>();
         for (Data p : object) {
-                box.add(p);
+            box.add(p);
         }
         return box;
     }
 
-
-    }
-
+}
