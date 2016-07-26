@@ -2,6 +2,7 @@
 package ru.klim.weatherinfo;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -28,7 +29,7 @@ import java.io.IOException;
 /**
  * Created by Администратор on 10.07.2016.
  */
-public class TodayWeatherFragment extends Fragment implements LocationListener {
+public class TodayWeatherFragment extends Fragment {
     private TextView mJsonTempDayView;
     private TextView mJsonTempNightView;
     private TextView mJsonPressueView;
@@ -40,11 +41,14 @@ public class TodayWeatherFragment extends Fragment implements LocationListener {
     private LocationManager mManager;
     private String mProvider;
     private String day, night, humidity, pressure, speed;
+    private MainActivity mainActivity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viev = inflater.inflate(R.layout.current_fragment, container, false);
+
+        mainActivity = (MainActivity)getActivity();
 
         mJsonTempDayView = (TextView) viev.findViewById(R.id.dayTemperature);
         mJsonTempNightView = (TextView) viev.findViewById(R.id.nightTemperature);
@@ -54,9 +58,16 @@ public class TodayWeatherFragment extends Fragment implements LocationListener {
 
         rc = new RestClient();
         getWeather();
+        mLocation = ((MainActivity) getActivity()).getlocation();
 
         return viev;
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) context;
     }
 
     private void getWeather() {
@@ -105,53 +116,53 @@ public class TodayWeatherFragment extends Fragment implements LocationListener {
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        mLocation = location;
-        getWeather();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mManager.requestLocationUpdates(mProvider, 400, 1, this);
-    }
-
-    @Override
-    public void onPause()
-
-    {
-        super.onPause();
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        mManager.removeUpdates(this);
-    }
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        mLocation = location;
+//        getWeather();
+//    }
+//
+//    @Override
+//    public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderEnabled(String provider) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderDisabled(String provider) {
+//
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        mManager.requestLocationUpdates(mProvider, 400, 1, this);
+//    }
+//
+//    @Override
+//    public void onPause()
+//
+//    {
+//        super.onPause();
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//            return;
+//        }
+//        mManager.removeUpdates(this);
+//    }
 
     class Loader extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (mLocation != null) {
+            if (mLocation!= null) {
                 setData();
             } else {
                 initLocation();
