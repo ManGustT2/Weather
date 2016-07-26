@@ -99,22 +99,7 @@ public class TodayWeatherFragment extends Fragment {
         }
     }
 
-    private void initLocation() {
-        mManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        mProvider = mManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mLocation = mManager.getLastKnownLocation(mProvider);
 
-        boolean enable = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if (!enable) {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }
-    }
 
 //    @Override
 //    public void onLocationChanged(Location location) {
@@ -157,6 +142,22 @@ public class TodayWeatherFragment extends Fragment {
 //        }
 //        mManager.removeUpdates(this);
 //    }
+private void initLocation() {
+    mManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+    Criteria criteria = new Criteria();
+    mProvider = mManager.getBestProvider(criteria, false);
+    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        return;
+    }
+    mLocation = mManager.getLastKnownLocation(mProvider);
+
+    boolean enable = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+    if (!enable) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
+}
 
     class Loader extends AsyncTask<Void, Void, Void> {
 
