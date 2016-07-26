@@ -2,6 +2,7 @@
 package ru.klim.weatherinfo;
 
         import android.Manifest;
+        import android.content.Context;
         import android.content.Intent;
         import android.content.SharedPreferences;
         import android.content.pm.PackageManager;
@@ -34,7 +35,7 @@ package ru.klim.weatherinfo;
 /**
  * Created by Администратор on 10.07.2016.
  */
-public class WeekWeatherFragment extends Fragment implements LocationListener{
+public class WeekWeatherFragment extends Fragment{
     ArrayList<Data> data = new ArrayList<Data>();
     WeatherAdapter weatherAdapter;
     String press,day,temperature;
@@ -45,10 +46,13 @@ public class WeekWeatherFragment extends Fragment implements LocationListener{
     private LocationManager mManager;
     private String mProvider;
     private ListView listview;
+    public MainActivity mainAcivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainAcivity = (MainActivity)getActivity();
 
         rc = new RestClient();
 // rc.getListWeather()
@@ -110,6 +114,13 @@ public class WeekWeatherFragment extends Fragment implements LocationListener{
         return v;
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainAcivity = (MainActivity) context;
+    }
+
     private void getWeather() {
         if (mLocation != null) {
             new Loader().execute();
@@ -136,45 +147,45 @@ public class WeekWeatherFragment extends Fragment implements LocationListener{
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        mLocation = location;
-        getWeather();
-    }
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        mLocation = location;
+//        getWeather();
+//    }
+//
+//    @Override
+//    public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderEnabled(String provider) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderDisabled(String provider) {
+//
+//    }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mManager.requestLocationUpdates(mProvider, 400, 1, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        mManager.removeUpdates(this);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        mManager.requestLocationUpdates(mProvider, 400, 1, this);
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//            return;
+//        }
+//        mManager.removeUpdates(this);
+//    }
 
     private void getData(){
         try {
@@ -184,9 +195,9 @@ public class WeekWeatherFragment extends Fragment implements LocationListener{
             for(int i=0; i<array.length(); i++){
                 JSONObject ob = (JSONObject) array.get(i);
                 imegeView = R.drawable.snow;
-                JSONObject main = ob.getJSONObject("main");
-                press = main.getString("pressure");
-                temperature = main.getString("temp");
+                press = ob.getString("pressure");
+                JSONObject temp = ob.getJSONObject("temp");
+                temperature = temp.getString("day");
                 day = ob.getString("dt");
                 Data d = new Data(press, day, temperature, imegeView);
                 data.add(d);

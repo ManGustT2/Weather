@@ -1,6 +1,12 @@
 package ru.klim.weatherinfo;
 
+        import android.Manifest;
+        import android.content.pm.PackageManager;
+        import android.location.Location;
+        import android.location.LocationListener;
+        import android.location.LocationManager;
         import android.os.Bundle;
+        import android.support.v4.app.ActivityCompat;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
         import android.support.design.widget.NavigationView;
@@ -18,8 +24,11 @@ import ru.klim.weatherinfo.TodayWeatherFragment;
 import ru.klim.weatherinfo.WeekWeatherFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    FragmentManager fm;
+        implements NavigationView.OnNavigationItemSelectedListener,LocationListener {
+    private FragmentManager fm;
+    private Location mLocation;
+    private LocationManager mManager;
+    private String mProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,49 @@ public class MainActivity extends AppCompatActivity
             fragment = new TodayWeatherFragment();
             addFragment(fragment);
         }
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        //getWeather();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+        }
+        mManager.requestLocationUpdates(mProvider, 400, 1, this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mManager.removeUpdates(this);
+    }
+
+    public Location getlocation(){
+        return mLocation;
     }
 
     public void addFragment(Fragment fragment) {
