@@ -1,7 +1,7 @@
-
 package ru.klim.weatherinfo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,23 +43,25 @@ public class TodayWeatherFragment extends Fragment {
     private String day, night, humidity, pressure, speed;
     private MainActivity mainActivity;
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainActivity =(MainActivity)activity;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viev = inflater.inflate(R.layout.current_fragment, container, false);
-
-        mainActivity = (MainActivity)getActivity();
 
         mJsonTempDayView = (TextView) viev.findViewById(R.id.dayTemperature);
         mJsonTempNightView = (TextView) viev.findViewById(R.id.nightTemperature);
         mJsonPressueView = (TextView) viev.findViewById(R.id.pressure);
         mJsonHumidityView = (TextView) viev.findViewById(R.id.humidity);
         mJsonWindView = (TextView) viev.findViewById(R.id.wind);
-
+        mLocation = mainActivity.getlocation();
         rc = new RestClient();
         getWeather();
-        mLocation = ((MainActivity) getActivity()).getlocation();
-
         return viev;
 
     }
@@ -71,11 +73,7 @@ public class TodayWeatherFragment extends Fragment {
     }
 
     private void getWeather() {
-        if (mLocation != null) {
-            new Loader().execute();
-        } else {
-            initLocation();
-        }
+        new Loader().execute();
     }
 
     private void setData() {
@@ -100,74 +98,13 @@ public class TodayWeatherFragment extends Fragment {
     }
 
 
-
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        mLocation = location;
-//        getWeather();
-//    }
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        mManager.requestLocationUpdates(mProvider, 400, 1, this);
-//    }
-//
-//    @Override
-//    public void onPause()
-//
-//    {
-//        super.onPause();
-//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//            return;
-//        }
-//        mManager.removeUpdates(this);
-//    }
-private void initLocation() {
-    mManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-    Criteria criteria = new Criteria();
-    mProvider = mManager.getBestProvider(criteria, false);
-    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        return;
-    }
-    mLocation = mManager.getLastKnownLocation(mProvider);
-
-    boolean enable = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-    if (!enable) {
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
-    }
-}
-
     class Loader extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (mLocation!= null) {
-                setData();
-            } else {
-                initLocation();
-            }
+
+            setData();
+
             return null;
         }
 
