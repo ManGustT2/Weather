@@ -3,7 +3,6 @@ package ru.klim.weatherinfo;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -26,12 +30,11 @@ public class TodayWeatherFragment extends Fragment {
     private TextView mJsonPressueView;
     private TextView mJsonHumidityView;
     private TextView mJsonWindView;
+    private ImageView mImegeView;
 
     private RestClient rc;
     private Location mLocation;
-    private LocationManager mManager;
-    private String mProvider;
-    private String day, night, humidity, pressure, speed;
+    private String day, night, humidity, pressure, speed, icon;
     private MainActivity mainActivity;
 
     @Override
@@ -51,7 +54,7 @@ public class TodayWeatherFragment extends Fragment {
         mJsonPressueView = (TextView) viev.findViewById(R.id.pressure);
         mJsonHumidityView = (TextView) viev.findViewById(R.id.humidity);
         mJsonWindView = (TextView) viev.findViewById(R.id.wind);
-
+        mImegeView = (ImageView)viev.findViewById(R.id.mImageView);
         mLocation = mainActivity.getlocation();
 
         rc = new RestClient();
@@ -89,6 +92,8 @@ public class TodayWeatherFragment extends Fragment {
             pressure = main.getString("pressure");
             JSONObject jwind = object.getJSONObject("wind");
             speed = jwind.getString("speed");
+            JSONArray weather = object.getJSONArray("weather");
+            icon = weather.getJSONObject(0).getString("icon");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +118,11 @@ public class TodayWeatherFragment extends Fragment {
             mJsonTempNightView.setText("Ночь"+" "+ night);
             mJsonPressueView.setText("Влажность"+" "+humidity);
             mJsonHumidityView.setText("Давление"+" "+pressure);
-            mJsonWindView.setText("Ветер"+" "+speed);
+            mJsonWindView.setText("Ветер" + " " + speed);
+            Glide.with(getContext()).load("http://api.openweathermap.org/img/w/"+icon+".png")
+                    .into(mImegeView);
+
+
         }
     }
 }

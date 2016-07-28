@@ -16,12 +16,22 @@ public class Data {
     private long day;
     private String temperature;
     private int imageView;
+    private String icon;
 
-    Data(String _press, long _day, String _temperature, int _imageView){
+    Data(String _press, long _day, String _temperature, int _imageView, String icon){
         pressure = _press;
         imageView = _imageView;
         day = _day;
         temperature = _temperature;
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getPressure() {

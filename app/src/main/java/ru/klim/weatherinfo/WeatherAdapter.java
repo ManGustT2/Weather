@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -58,9 +60,8 @@ public class WeatherAdapter extends BaseAdapter{
         TextView tvTemperature = (TextView) view.findViewById(R.id.textViewTemoerature);
         tvTemperature.setText("Температура:"+" "+d.getTemperature());
         ImageView ivIcon = (ImageView) view.findViewById(R.id.imageView);
-        if(d.getImageView() != 0){
-            ivIcon.setImageResource(d.getImageView());
-        }
+        Glide.with(ctx).load("http://api.openweathermap.org/img/w/"+d.getIcon()+".png")
+                .into(ivIcon);
 
         return view;
     }

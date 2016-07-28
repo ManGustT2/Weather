@@ -16,9 +16,6 @@ public class RestClient {
     private static final String WEATHER_KEY = "&appid=7d261ea6e556c0f4f08906ae8353f2bd&units=metric";
     private static final String LINK = "http://api.openweathermap.org/data/2.5/";
 
-    public String getUrl(String url) throws IOException {
-        return new String(getUrlBytes(LINK+"weather?q=Kiev"+WEATHER_KEY));
-    }
 
     public String getListWeather(Location location) throws IOException {
         String url = LINK+"forecast/daily?&lat="+location.getLatitude()+"&lon="+location.getLongitude()+WEATHER_KEY+"&cnt=7";

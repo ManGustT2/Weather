@@ -29,7 +29,7 @@ public class WeekWeatherFragment extends Fragment{
     private RestClient rc;
     private Location mLocation;
     private ListView listview;
-    public MainActivity mainAcivity;
+    private MainActivity mainAcivity;
 
     @Nullable
     @Override
@@ -71,7 +71,9 @@ public class WeekWeatherFragment extends Fragment{
                 JSONObject temp = ob.getJSONObject("temp");
                 temperature = temp.getString("day");
                 day = ob.getLong("dt");
-                Data d = new Data(press, day, temperature, imegeView);
+                JSONArray weather = ob.getJSONArray("weather");
+                String icon = weather.getJSONObject(0).getString("icon");
+                Data d = new Data(press, day, temperature, imegeView, icon);
                 data.add(d);
             }
 
