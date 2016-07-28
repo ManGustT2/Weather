@@ -22,11 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ru.klim.weatherinfo.R;
-import ru.klim.weatherinfo.SettingFragment;
-import ru.klim.weatherinfo.TodayWeatherFragment;
-import ru.klim.weatherinfo.WeekWeatherFragment;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,LocationListener {
     private FragmentManager fm;
@@ -80,7 +75,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-//getWeather();
+        if(mLocation != null){
+            Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.conteiner);
+            if(fragment instanceof TodayWeatherFragment) {
+                ((TodayWeatherFragment)fragment).getLocation(mLocation);
+            } else {
+                ((WeekWeatherFragment)fragment).getLocation(mLocation);
+            }
+        }
     }
 
     @Override
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
@@ -118,8 +121,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public Location getlocation(){
-        return
-                mLocation;
+        return mLocation;
     }
 
     public void addFragment(Fragment fragment) {
@@ -144,19 +146,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-// Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-// Handle action bar item clicks here. The action bar will
-// automatically handle clicks on the Home/Up button, so long
-// as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-//noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -167,7 +164,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-// Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_current) {
@@ -187,4 +183,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

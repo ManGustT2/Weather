@@ -20,7 +20,6 @@ public class WeatherAdapter extends BaseAdapter{
     Context ctx;
     LayoutInflater lInflater;
     ArrayList<Data> object;
-    String day;
 
     WeatherAdapter(Context context,ArrayList<Data> date){
         ctx = context;
@@ -53,22 +52,15 @@ public class WeatherAdapter extends BaseAdapter{
         Data d = getData(position);
 
         TextView tvPressure = (TextView) view.findViewById(R.id.pressure);
-        tvPressure.setText(d.getPressure());
+        tvPressure.setText("Давление:" + " " + d.getPressure());
         TextView tvDay = (TextView) view.findViewById(R.id.textViewDay);
-        tvDay.setText(d.getDay());
+        tvDay.setText("День недели:"+" "+ d.getDay());
         TextView tvTemperature = (TextView) view.findViewById(R.id.textViewTemoerature);
-        tvTemperature.setText(d.getTemperature());
+        tvTemperature.setText("Температура:"+" "+d.getTemperature());
         ImageView ivIcon = (ImageView) view.findViewById(R.id.imageView);
         if(d.getImageView() != 0){
             ivIcon.setImageResource(d.getImageView());
         }
-
-// запусти перевірь чи працює
-
-// ((TextView) view.findViewById(R.id.pressure)).setText(d.getDay());
-// ((TextView) view.findViewById(R.id.textViewDay)).setText("");
-// ((TextView) view.findViewById(R.id.textViewTemoerature)).setText("");
-// ((ImageView) view.findViewById(R.id.imageView)).setImageResource(d.getImageView());
 
         return view;
     }

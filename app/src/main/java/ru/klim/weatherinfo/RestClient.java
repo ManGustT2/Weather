@@ -21,7 +21,7 @@ public class RestClient {
     }
 
     public String getListWeather(Location location) throws IOException {
-        String url = LINK+"forecast/daily?&lat="+location.getLatitude()+"&lon="+location.getLongitude()+WEATHER_KEY;
+        String url = LINK+"forecast/daily?&lat="+location.getLatitude()+"&lon="+location.getLongitude()+WEATHER_KEY+"&cnt=7";
         return new String(getUrlBytes(url));
     }
 

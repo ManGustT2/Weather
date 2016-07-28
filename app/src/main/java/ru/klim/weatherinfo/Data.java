@@ -1,58 +1,68 @@
 package ru.klim.weatherinfo;
 
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
+import android.net.ParseException;
+import android.text.format.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Администратор on 10.07.2016.
  */
 public class Data {
     private String pressure;
-    private String day;
+    private long day;
     private String temperature;
     private int imageView;
 
-    //bla bla bla
-
-    //Рсука в пизду лагає дивися що я роблю потім поясню цю хуйню бо її бля треба знати)
-    //
-
-
-    Data(String _press,String _day, String _temperature, int _imageView){
+    Data(String _press, long _day, String _temperature, int _imageView){
         pressure = _press;
         imageView = _imageView;
         day = _day;
         temperature = _temperature;
-
     }
-
-
 
     public String getPressure() {
         return pressure;
     }
 
-    public void setPressure(String name) {
-        this.pressure = pressure;
+    public String getTimestamp() {
+        Date d = getDate(day);
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(d.getTime());
+        String date = DateFormat.format("EEEE", cal).toString();
+        return date;
     }
+
+    private Date getDate(long time) {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();//get your local time zone.
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        sdf.setTimeZone(tz);//set time zone.
+        String localTime = sdf.format(new Date(time * 1000));
+        Date date = new Date();
+        try {
+            date = sdf.parse(localTime);//get local date
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public int getImageView(){
         return imageView;
     }
-    public void setImageView(int imageView){
-        this.imageView = imageView;
-    }
+
     public String getDay(){
-        return day;
+        return getTimestamp();
     }
-    public void setDay(String day){
-        this.day = day;
-    }
+
     public String getTemperature(){
         return temperature;
     }
-    public void setTemperature(String temperature){
-        this.temperature = temperature;
-    }
-
 
 }

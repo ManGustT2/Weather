@@ -63,7 +63,6 @@ public class SettingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
 
         View viev = inflater.inflate(R.layout.settings_fragment, container, false);
         findUI(viev);

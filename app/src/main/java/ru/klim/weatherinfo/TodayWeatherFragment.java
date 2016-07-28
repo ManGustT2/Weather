@@ -1,29 +1,20 @@
 package ru.klim.weatherinfo;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 /**
@@ -47,6 +38,7 @@ public class TodayWeatherFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mainActivity =(MainActivity)activity;
+
     }
 
     @Nullable
@@ -59,11 +51,19 @@ public class TodayWeatherFragment extends Fragment {
         mJsonPressueView = (TextView) viev.findViewById(R.id.pressure);
         mJsonHumidityView = (TextView) viev.findViewById(R.id.humidity);
         mJsonWindView = (TextView) viev.findViewById(R.id.wind);
+
         mLocation = mainActivity.getlocation();
+
         rc = new RestClient();
-        getWeather();
+        if(mLocation != null)
+            getWeather();
         return viev;
 
+    }
+
+    public void getLocation(Location location){
+        mLocation = location;
+        getWeather();
     }
 
     @Override
@@ -97,7 +97,6 @@ public class TodayWeatherFragment extends Fragment {
         }
     }
 
-
     class Loader extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -110,11 +109,11 @@ public class TodayWeatherFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            mJsonTempDayView.setText(day);
-            mJsonTempNightView.setText(night);
-            mJsonPressueView.setText(humidity);
-            mJsonHumidityView.setText(pressure);
-            mJsonWindView.setText(speed);
+            mJsonTempDayView.setText("День"+" " + day);
+            mJsonTempNightView.setText("Ночь"+" "+ night);
+            mJsonPressueView.setText("Влажность"+" "+humidity);
+            mJsonHumidityView.setText("Давление"+" "+pressure);
+            mJsonWindView.setText("Ветер"+" "+speed);
         }
     }
 }
