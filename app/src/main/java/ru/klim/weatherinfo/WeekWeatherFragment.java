@@ -4,23 +4,26 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Администратор on 10.07.2016.
  */
-public class WeekWeatherFragment extends Fragment{
+public class WeekWeatherFragment extends Fragment {
     ArrayList<Data> data = new ArrayList<Data>();
     WeatherAdapter weatherAdapter;
     String press, temperature;
