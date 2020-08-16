@@ -11,9 +11,13 @@
             android:icon="@drawable/ic_menu_week"
             android:title="@string/week_item" />
         <item
+            android:id="@+id/nav_state"
+            android:icon="@drawable/ic_menu_setting"
+            android:title="@string/state_item" />
+        <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_menu_setting"
-            android:title="@string/settingd_item" />
+            android:title="@string/settings_item" />
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_menu_exit"

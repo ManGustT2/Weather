@@ -7,7 +7,8 @@
     <string name="action_settings">Settings</string>
     <string name="current_item">Погода на сегодня</string>
     <string name="week_item">Погода на неделю</string>
-    <string name="settingd_item">Настройки</string>
+    <string name="state_item">Состояние</string>
+    <string name="settings_item">Подключения</string>
     <string name="exit_item">Выход</string>
     <string name="week_day">День недели</string>
     <string name="number_month">Число</string>

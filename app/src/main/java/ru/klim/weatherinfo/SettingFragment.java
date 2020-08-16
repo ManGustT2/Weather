@@ -1,74 +1,108 @@
 package ru.klim.weatherinfo;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
+
+import java.util.List;
 
 /**
  * Created by Администратор on 10.07.2016.
  */
 public class SettingFragment extends Fragment {
-    Switch mWifiSwitch, mStartSwitch, mAskToEnterSwitch;
-    public static final String APP_PREFERENCES = "my_settings";
-    public static final String APP_PREFERENCES_WIFI = "wi-fi";
-    public static final String APP_PREFERENCES_START = "load_by_start";
-    public static final String APP_PREFERENCES_ASKBYEXIT = "ask_by_exit";
-    private SharedPreferences mSettings;
 
+    private ContentLoadingProgressBar progress;
+    private TextView error;
+    private ListView listview;
+    private AppCompatActivity mainActivity;
+    private WifiListAdapter adapter = new WifiListAdapter();
+
+    WifiManager wifiManager;
+
+    BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent intent) {
+            boolean success = intent.getBooleanExtra(
+                    WifiManager.EXTRA_RESULTS_UPDATED, false);
+            if (success) {
+                scanSuccess();
+            } else {
+                // scan failure handling
+                scanFailure();
+            }
+        }
+    };
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) context;
+    }
+
+    private void scanSuccess() {
+        List<ScanResult> results = wifiManager.getScanResults();
+        Log.d("SettingFragment", "scanSuccess() -> results: " + results);
+        progress.setVisibility(View.GONE);
+        adapter.setData(results);
+    }
+
+    private void scanFailure() {
+        // handle failure: new scan did NOT succeed
+        // consider using old scan results: these are the OLD results!
+        List<ScanResult> results = wifiManager.getScanResults();
+        Log.d("SettingFragment", "scanFailure() -> results: " + results);
+        progress.setVisibility(View.GONE);
+        adapter.setData(results);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-
+        wifiManager = (WifiManager) mainActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        SharedPreferences.Editor editorWiFi = mSettings.edit();
-        editorWiFi.putBoolean(APP_PREFERENCES_WIFI, mWifiSwitch.isChecked());
-        SharedPreferences.Editor editorStart = mSettings.edit();
-        editorStart.putBoolean(APP_PREFERENCES_START, mStartSwitch.isChecked());
-        SharedPreferences.Editor editorAsk = mSettings.edit();
-        editorAsk.putBoolean(APP_PREFERENCES_ASKBYEXIT, mAskToEnterSwitch.isChecked());
-        editorWiFi.apply();
-        editorStart.apply();
-        editorAsk.apply();
-    }
-
-     public void getPreference(){
-        mWifiSwitch.setChecked(mSettings.getBoolean(APP_PREFERENCES_WIFI, false));
-       mStartSwitch.setChecked(mSettings.getBoolean(APP_PREFERENCES_START, false));
-       mAskToEnterSwitch.setChecked(mSettings.getBoolean(APP_PREFERENCES_ASKBYEXIT, false));
-     }
-
-
-    private void findUI(View v) {
-        mWifiSwitch = (Switch) v.findViewById(R.id.wifiSwitch);
-        mStartSwitch = (Switch) v.findViewById(R.id.startSwitch);
-        mAskToEnterSwitch = (Switch) v.findViewById(R.id.askToEnterSwitch);
-
-    }
-
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.settings_fragment, container, false);
 
-        View viev = inflater.inflate(R.layout.settings_fragment, container, false);
-        findUI(viev);
-        getPreference();
-        return viev;
+        findUI(view);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        mainActivity.registerReceiver(wifiScanReceiver, intentFilter);
+
+        boolean success = wifiManager.startScan();
+        if (!success) {
+            // scan failure handling
+            scanFailure();
+        }
+
+        return view;
+    }
+
+    private void findUI(View view) {
+        progress = view.findViewById(R.id.progress);
+        error = view.findViewById(R.id.error);
+        listview = view.findViewById(R.id.adapter_container);
+
+        listview.setAdapter(adapter);
     }
 
 

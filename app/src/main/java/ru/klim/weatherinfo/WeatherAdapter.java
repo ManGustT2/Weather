@@ -15,12 +15,12 @@ import java.util.ArrayList;
 /**
  * Created by Администратор on 10.07.2016.
  */
-public class WeatherAdapter extends BaseAdapter{
+public class WeatherAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
     ArrayList<Data> object;
 
-    WeatherAdapter(Context context,ArrayList<Data> date){
+    WeatherAdapter(Context context, ArrayList<Data> date){
         ctx = context;
         object = date;
         lInflater = (LayoutInflater) ctx
